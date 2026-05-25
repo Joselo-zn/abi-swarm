@@ -1,0 +1,7 @@
+# Planner Agent Dependencies
+# Ensure latest abi-core is installed
+abi-core-ai>=1.12.42
+langchain-google-genai>=4.2.3
+
+# All other base dependencies inherited from abi-image
+# Add only planner-specific dependencies here if needed

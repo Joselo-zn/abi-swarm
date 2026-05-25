@@ -1,0 +1,129 @@
+{
+  "@context": [
+    "https://raw.githubusercontent.com/GoogleCloudPlatform/a2a-llm/main/a2a/ontology/a2a_context.jsonld"
+  ],
+  "@type": "Agent",
+  "id": "agent://builder_agent",
+  "name": "Builder Agent",
+  "description": "Builds and deploys ephemeral AI agents on demand",
+  "url": "http://abi-swarm-builder:11439",
+  "version": "1.0.0",
+  "capabilities": {
+    "streaming": "True",
+    "pushNotifications": "True",
+    "stateTransitionHistory": "False"
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain"
+  ],
+  "supportedTasks": [
+    "build ephemeral agents",
+    "create MCP tools",
+    "deploy containers",
+    "manage agent lifecycle"
+  ],
+  "llmConfig": {
+    "provider": "ollama",
+    "model": "qwen2.5:3b",
+    "temperature": 0.1
+  },
+  "tools": [],
+  "functions": [],
+  "embedding": false,
+  "prompt": "You are Builder Agent, a specialized agent responsible for builds and deploys ephemeral ai agents on demand. Process user requests efficiently and provide clear, structured responses.",
+  "skills": [
+    {
+      "id": "build_ephemeral_agents",
+      "name": "Build Ephemeral Agents",
+      "description": "Build Ephemeral Agents functionality for Builder Agent",
+      "tags": [
+        "build ephemeral agents",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute build ephemeral agents operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    },
+    {
+      "id": "create_mcp_tools",
+      "name": "Create Mcp Tools",
+      "description": "Create Mcp Tools functionality for Builder Agent",
+      "tags": [
+        "create mcp tools",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute create mcp tools operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    },
+    {
+      "id": "deploy_containers",
+      "name": "Deploy Containers",
+      "description": "Deploy Containers functionality for Builder Agent",
+      "tags": [
+        "deploy containers",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute deploy containers operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    },
+    {
+      "id": "manage_agent_lifecycle",
+      "name": "Manage Agent Lifecycle",
+      "description": "Manage Agent Lifecycle functionality for Builder Agent",
+      "tags": [
+        "manage agent lifecycle",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute manage agent lifecycle operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    }
+  ],
+  "auth": {
+    "method": "hmac_sha256",
+    "key_id": "agent://builder_agent-default",
+    "shared_secret": "hgfGZlyo_DhNpxNOLg0IgN34tAOzqbzU6jus0JM-0pg"
+  },
+  "metadata": {
+    "created": "2026-05-23T16:06:20.786803",
+    "generator": "abi-core-cli",
+    "version": "1.0.0"
+  },
+  "permissions": [
+    "register_agents",
+    "unregister_agents"
+  ]
+}

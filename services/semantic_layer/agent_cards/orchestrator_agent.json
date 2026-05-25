@@ -1,0 +1,125 @@
+{
+  "@context": [
+    "https://raw.githubusercontent.com/GoogleCloudPlatform/a2a-llm/main/a2a/ontology/a2a_context.jsonld"
+  ],
+  "@type": "Agent",
+  "id": "agent://abi_orchestrator_agent",
+  "name": "Abi Orchestrator Agent",
+  "description": "Coordinates multi-agent workflow execution",
+  "url": "http://abi-swarm-orchestrator:8002",
+  "version": "1.0.0",
+  "capabilities": {
+    "streaming": "True",
+    "pushNotifications": "True",
+    "stateTransitionHistory": "False"
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain"
+  ],
+  "supportedTasks": [
+    "coordinate workflows",
+    "execute multi-agent plans",
+    "monitor task execution",
+    "synthesize results"
+  ],
+  "llmConfig": {
+    "provider": "ollama",
+    "model": "qwen2.5:3b",
+    "temperature": 0.1
+  },
+  "tools": [],
+  "functions": [],
+  "embedding": false,
+  "prompt": "You are Abi Orchestrator Agent, a specialized agent responsible for coordinates multi-agent workflow execution. Process user requests efficiently and provide clear, structured responses.",
+  "skills": [
+    {
+      "id": "coordinate_workflows",
+      "name": "Coordinate Workflows",
+      "description": "Coordinate Workflows functionality for Abi Orchestrator Agent",
+      "tags": [
+        "coordinate workflows",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute coordinate workflows operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    },
+    {
+      "id": "execute_multi_agent_plans",
+      "name": "Execute Multi-Agent Plans",
+      "description": "Execute Multi-Agent Plans functionality for Abi Orchestrator Agent",
+      "tags": [
+        "execute multi-agent plans",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute execute multi-agent plans operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    },
+    {
+      "id": "monitor_task_execution",
+      "name": "Monitor Task Execution",
+      "description": "Monitor Task Execution functionality for Abi Orchestrator Agent",
+      "tags": [
+        "monitor task execution",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute monitor task execution operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    },
+    {
+      "id": "synthesize_results",
+      "name": "Synthesize Results",
+      "description": "Synthesize Results functionality for Abi Orchestrator Agent",
+      "tags": [
+        "synthesize results",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute synthesize results operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    }
+  ],
+  "auth": {
+    "method": "hmac_sha256",
+    "key_id": "agent://abi_orchestrator_agent-default",
+    "shared_secret": "lvpFQWFw0ElcLp6oLatvxtDuBZdRW8x7BDYz0UkKONQ"
+  },
+  "metadata": {
+    "created": "2026-05-23T16:06:20.784619",
+    "generator": "abi-core-cli",
+    "version": "1.0.0"
+  }
+}

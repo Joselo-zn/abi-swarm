@@ -1,0 +1,125 @@
+{
+  "@context": [
+    "https://raw.githubusercontent.com/GoogleCloudPlatform/a2a-llm/main/a2a/ontology/a2a_context.jsonld"
+  ],
+  "@type": "Agent",
+  "id": "agent://planner_agent",
+  "name": "Planner Agent",
+  "description": "Decomposes tasks and assigns agents",
+  "url": "http://abi-swarm-planner:11437",
+  "version": "1.0.0",
+  "capabilities": {
+    "streaming": "True",
+    "pushNotifications": "True",
+    "stateTransitionHistory": "False"
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain"
+  ],
+  "supportedTasks": [
+    "decompose complex queries",
+    "assign agents to tasks",
+    "create execution plans",
+    "manage task dependencies"
+  ],
+  "llmConfig": {
+    "provider": "ollama",
+    "model": "qwen2.5:3b",
+    "temperature": 0.1
+  },
+  "tools": [],
+  "functions": [],
+  "embedding": false,
+  "prompt": "You are Planner Agent, a specialized agent responsible for decomposes tasks and assigns agents. Process user requests efficiently and provide clear, structured responses.",
+  "skills": [
+    {
+      "id": "decompose_complex_queries",
+      "name": "Decompose Complex Queries",
+      "description": "Decompose Complex Queries functionality for Planner Agent",
+      "tags": [
+        "decompose complex queries",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute decompose complex queries operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    },
+    {
+      "id": "assign_agents_to_tasks",
+      "name": "Assign Agents To Tasks",
+      "description": "Assign Agents To Tasks functionality for Planner Agent",
+      "tags": [
+        "assign agents to tasks",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute assign agents to tasks operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    },
+    {
+      "id": "create_execution_plans",
+      "name": "Create Execution Plans",
+      "description": "Create Execution Plans functionality for Planner Agent",
+      "tags": [
+        "create execution plans",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute create execution plans operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    },
+    {
+      "id": "manage_task_dependencies",
+      "name": "Manage Task Dependencies",
+      "description": "Manage Task Dependencies functionality for Planner Agent",
+      "tags": [
+        "manage task dependencies",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute manage task dependencies operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    }
+  ],
+  "auth": {
+    "method": "hmac_sha256",
+    "key_id": "agent://planner_agent-default",
+    "shared_secret": "faHZhvgCo3cfLGgBv8bUbXSCukc7yi3KxrAcy7z4gwY"
+  },
+  "metadata": {
+    "created": "2026-05-23T16:06:20.782068",
+    "generator": "abi-core-cli",
+    "version": "1.0.0"
+  }
+}

@@ -1,0 +1,7 @@
+# Builder Agent Dependencies
+abi-core-ai>=1.12.42
+langchain-google-genai>=4.2.3
+
+# All other base dependencies inherited from abi-image
+# Add only builder-specific dependencies here if needed
+ 

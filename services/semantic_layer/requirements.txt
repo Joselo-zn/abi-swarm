@@ -1,0 +1,8 @@
+# Semantic Layer specific dependencies only
+# Common dependencies are provided by agentbase/abi-image-v2:latest
+
+# Vector database and embeddings
+weaviate-client>=4.0.0
+
+# ABI Core package
+abi-core-ai>=1.12.42

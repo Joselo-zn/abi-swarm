@@ -1,0 +1,295 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+    - 11434:11434
+    volumes:
+    - ollama_data:/root/.ollama
+    environment:
+    - OLLAMA_HOST=0.0.0.0
+    networks:
+    - abi-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:11434/api/tags
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  abi-swarm:
+    build: ./services/web_api
+    container_name: abi-swarm-app
+    ports:
+    - 8000:8000
+    environment:
+    - ABI_ROLE=abi swarm
+    - ABI_NODE=ABI Node
+    - MODEL_NAME=qwen2.5:3b
+    - OLLAMA_HOST=http://localhost:11434
+    - LOG_LEVEL=INFO
+    - SEMANTIC_LAYER_HOST=http://abi-swarm-semantic-layer:10100
+    - SERVICE_CARD=/app/service_cards/webapp.json
+    - ARTIFACT_ENDPOINT=http://abi-swarm-minio:9000
+    - ARTIFACT_ACCESS_KEY=minioadmin
+    - ARTIFACT_SECRET_KEY=minioadmin
+    - ARTIFACT_BUCKET=abi-artifacts
+    - GUARDIAN_URL=http://abi-swarm-guardian:11438
+    - OPA_URL=http://abi-swarm-opa:8181
+    volumes:
+    - ./logs:/app/logs
+    depends_on:
+    - abi-swarm-semantic-layer
+    - abi-swarm-guardian
+    - abi-swarm-opa
+    networks:
+    - abi-network
+  abi-swarm-weaviate:
+    image: semitechnologies/weaviate:1.32.4
+    container_name: abi-swarm-weaviate
+    ports:
+    - 8081:8080
+    environment:
+    - QUERY_DEFAULT_LIMIT=25
+    - AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED=true
+    - PERSISTENCE_DATA_PATH=/var/lib/weaviate
+    - CLUSTER_HOSTNAME=node1
+    - WEAVIATE_URL=http://abi-swarm-weaviate:8080
+    volumes:
+    - weaviate_data:/var/lib/weaviate
+    healthcheck:
+      test:
+      - CMD
+      - wget
+      - -qO-
+      - http://localhost:8080/v1/.well-known/ready
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    networks:
+    - abi-network
+    restart: unless-stopped
+  abi-swarm-semantic-layer:
+    build: ./services/semantic_layer
+    container_name: abi-swarm-semantic-layer
+    ports:
+    - 10100:10100
+    environment:
+    - AGENT_CARDS_BASE=/app/agent_cards
+    - ABI_LLM_BASE=http://ollama:11434
+    - EMBEDDING_MODEL=nomic-embed-text:v1.5
+    - GUARDIAN_URL=http://abi-swarm-guardian:11438
+    - OPA_URL=http://abi-swarm-opa:8181
+    - SEMANTIC_LAYER_HOST=0.0.0.0
+    - SEMANTIC_LAYER_PORT=10100
+    - WEAVIATE_URL=http://abi-swarm-weaviate:8080
+    volumes:
+    - ./services/semantic_layer/agent_cards:/app/agent_cards:ro
+    - ./services/semantic_layer/service_cards:/app/service_cards:ro
+    - ./services/semantic_layer/tool_cards:/app/tool_cards:ro
+    - ./logs:/app/logs
+    networks:
+    - abi-network
+    depends_on:
+      abi-swarm-weaviate:
+        condition: service_healthy
+    restart: unless-stopped
+  abi-swarm-minio:
+    image: minio/minio:latest
+    container_name: abi-swarm-minio
+    command: server /data --console-address ":9001"
+    ports:
+    - 9000:9000
+    - 9001:9001
+    environment:
+    - MINIO_ROOT_USER=minioadmin
+    - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+    - minio_data:/data
+    networks:
+    - abi-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:9000/minio/health/live
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  abi-swarm-guardian:
+    build: ./services/guardian
+    container_name: abi-swarm-guardian
+    ports:
+    - 11438:11434
+    - 8080:8080
+    environment:
+    - ABI_ROLE=Guardian Security
+    - ABI_NODE=ABI Node
+    - AGENT_HOST=0.0.0.0
+    - AGENT_PORT=11438
+    - OPA_URL=http://abi-swarm-opa:8181
+    - SEMANTIC_LAYER_HOST=http://abi-swarm-semantic-layer:10100
+    - MAX_RISK_THRESHOLD=0.7
+    - EMERGENCY_LOG_DIR=/app/emergency_logs
+    - GUARDIAL_DASHBOARD_PORT=8080
+    - GUARDIAL_DASHBOARD_HOST=0.0.0.0
+    - OLLAMA_HOST=http://ollama:11434
+    - MODEL_NAME=qwen2.5:3b
+    volumes:
+    - ollama_data:/root/.ollama
+    - ./logs:/app/logs
+    - ./services/guardian/emergency_logs:/app/emergency_logs
+    depends_on:
+    - ollama
+    - abi-swarm-opa
+    - abi-swarm-semantic-layer
+    networks:
+    - abi-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+      - CMD
+      - wget
+      - -qO-
+      - http://localhost:11438/health
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  abi-swarm-opa:
+    build: ./services/guardian/opa
+    container_name: abi-swarm-opa
+    ports:
+    - 8181:8181
+    environment:
+    - OPA_LOG_LEVEL=info
+    - OPA_HOST=0.0.0.0
+    volumes:
+    - ./services/guardian/opa/policies:/policies
+    - ./logs:/app/logs
+    networks:
+    - abi-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+      - CMD
+      - wget
+      - -qO-
+      - http://localhost:8181/health
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  abi-swarm-planner:
+    build: ./agents/planner
+    container_name: abi-swarm-planner
+    ports:
+    - 11437:11437
+    environment:
+    - MODEL_NAME=qwen2.5:3b
+    - GOOGLE_API_KEY=GOOGLE_API_KEY
+    - AGENT_PORT=11437
+    - SERVICE_PORT=11437
+    - MCP_HOST=abi-swarm-semantic-layer
+    - MCP_PORT=10100
+    - MCP_TRANSPORT=streamable-http
+    - SEMANTIC_LAYER_HOST=http://abi-swarm-semantic-layer:10100
+    - GUARDIAN_URL=http://abi-swarm-guardian:11438
+    - OPA_URL=http://abi-swarm-opa:8181
+    - START_OLLAMA=false
+    - LOAD_MODELS=false
+    - OLLAMA_HOST=http://ollama:11434
+    volumes:
+    - ./logs:/app/logs
+    - ./agents/planner/agent_cards:/app/agent_cards:ro
+    networks:
+    - abi-network
+    depends_on:
+    - abi-swarm-semantic-layer
+  abi-swarm-orchestrator:
+    build: ./agents/orchestrator
+    container_name: abi-swarm-orchestrator
+    ports:
+    - 8002:8002
+    - 8083:8083
+    environment:
+    - MODEL_NAME=qwen2.5:3b
+    - GOOGLE_API_KEY=GOOGLE_API_KEY
+    - AGENT_PORT=8002
+    - SERVICE_PORT=8002
+    - WEB_INTERFACE_PORT=8083
+    - MCP_HOST=abi-swarm-semantic-layer
+    - MCP_PORT=10100
+    - MCP_TRANSPORT=streamable-http
+    - SEMANTIC_LAYER_HOST=http://abi-swarm-semantic-layer:10100
+    - GUARDIAN_URL=http://abi-swarm-guardian:11438
+    - OPA_URL=http://abi-swarm-opa:8181
+    - ARTIFACT_ENDPOINT=http://abi-swarm-minio:9000
+    - ARTIFACT_ACCESS_KEY=minioadmin
+    - ARTIFACT_SECRET_KEY=minioadmin
+    - LOG_TO_ARTIFACT_STORE=true
+    - LOG_AGENT_NAME=orchestrator
+    - LOG_BUCKET=abi-logs
+    - EPHEMERAL_AUTO_DESTROY=true
+    - DOCKER_NETWORK=abi-swarm_abi-network
+    - START_OLLAMA=false
+    - LOAD_MODELS=false
+    - OLLAMA_HOST=http://ollama:11434
+    volumes:
+    - ./logs:/app/logs
+    - ./agents/orchestrator/agent_cards:/app/agent_cards:ro
+    - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+    - abi-network
+    depends_on:
+    - abi-swarm-semantic-layer
+    - abi-swarm-planner
+  abi-swarm-builder:
+    build: ./agents/builder
+    container_name: abi-swarm-builder
+    ports:
+    - 11439:11439
+    environment:
+    - MODEL_NAME=qwen2.5:3b
+    - GOOGLE_API_KEY=GOOGLE_API_KEY
+    - AGENT_PORT=11439
+    - SERVICE_PORT=11439
+    - MCP_HOST=abi-swarm-semantic-layer
+    - MCP_PORT=10100
+    - MCP_TRANSPORT=streamable-http
+    - SEMANTIC_LAYER_HOST=http://abi-swarm-semantic-layer:10100
+    - GUARDIAN_URL=http://abi-swarm-guardian:11438
+    - OPA_URL=http://abi-swarm-opa:8181
+    - DOCKER_NETWORK=abi-swarm_abi-network
+    - ARTIFACT_ENDPOINT=http://abi-swarm-minio:9000
+    - ARTIFACT_ACCESS_KEY=minioadmin
+    - ARTIFACT_SECRET_KEY=minioadmin
+    - ARTIFACT_BUCKET=abi-artifacts
+    - LOG_TO_ARTIFACT_STORE=true
+    - LOG_AGENT_NAME=builder
+    - LOG_BUCKET=abi-logs
+    - START_OLLAMA=false
+    - LOAD_MODELS=false
+    - OLLAMA_HOST=http://ollama:11434
+    volumes:
+    - ./logs:/app/logs
+    - ./agents/builder/agent_cards:/app/agent_cards:ro
+    - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+    - abi-network
+    depends_on:
+    - abi-swarm-semantic-layer
+volumes:
+  ollama_data:
+    external: true
+    name: ollama_data
+  weaviate_data:
+    driver: local
+  minio_data:
+    driver: local
+networks:
+  abi-network:
+    driver: bridge

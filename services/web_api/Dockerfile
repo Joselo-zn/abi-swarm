@@ -1,0 +1,29 @@
+# abi swarm Dockerfile
+FROM agentbase/abi-image-v2:latest
+
+WORKDIR /app
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application
+COPY . .
+
+# Create logs directory
+RUN mkdir -p /app/logs
+
+# Expose port
+EXPOSE 8000
+
+# Environment variables
+ENV ABI_ROLE="abi swarm"
+ENV ABI_NODE="ABI Node"
+ENV PYTHONPATH=/app
+
+# Health check
+HEALTHCHECK --interval=60s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Run application
+CMD ["python", "main.py"]

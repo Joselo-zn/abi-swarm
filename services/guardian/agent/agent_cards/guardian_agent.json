@@ -1,0 +1,125 @@
+{
+  "@context": [
+    "https://raw.githubusercontent.com/GoogleCloudPlatform/a2a-llm/main/a2a/ontology/a2a_context.jsonld"
+  ],
+  "@type": "Agent",
+  "id": "agent://guardian_agent",
+  "name": "Guardian Agent",
+  "description": "Guards execution by validating intents and actions against security policies",
+  "url": "http://abi-swarm-guardian:11438",
+  "version": "1.0.0",
+  "capabilities": {
+    "streaming": "True",
+    "pushNotifications": "True",
+    "stateTransitionHistory": "False"
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain"
+  ],
+  "supportedTasks": [
+    "validate_query",
+    "guardian_security",
+    "policy_validation",
+    "risk_assessment"
+  ],
+  "llmConfig": {
+    "provider": "ollama",
+    "model": "qwen2.5:3b",
+    "temperature": 0.1
+  },
+  "tools": [],
+  "functions": [],
+  "embedding": false,
+  "prompt": "You are Guardian Agent, a specialized agent responsible for guards execution by validating intents and actions against security policies. Process user requests efficiently and provide clear, structured responses.",
+  "skills": [
+    {
+      "id": "validate_query",
+      "name": "Validate Query",
+      "description": "Validate Query functionality for Guardian Agent",
+      "tags": [
+        "validate_query",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute validate_query operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    },
+    {
+      "id": "guardian_security",
+      "name": "Guardian Security",
+      "description": "Guardian Security functionality for Guardian Agent",
+      "tags": [
+        "guardian_security",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute guardian_security operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    },
+    {
+      "id": "policy_validation",
+      "name": "Policy Validation",
+      "description": "Policy Validation functionality for Guardian Agent",
+      "tags": [
+        "policy_validation",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute policy_validation operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    },
+    {
+      "id": "risk_assessment",
+      "name": "Risk Assessment",
+      "description": "Risk Assessment functionality for Guardian Agent",
+      "tags": [
+        "risk_assessment",
+        "processing",
+        "analysis"
+      ],
+      "examples": [
+        "Execute risk_assessment operation"
+      ],
+      "inputModes": [
+        "text/plain"
+      ],
+      "outputModes": [
+        "text/plain"
+      ]
+    }
+  ],
+  "auth": {
+    "method": "hmac_sha256",
+    "key_id": "agent://guardian_agent-default",
+    "shared_secret": "xG1tiQciIB-oxtp_FQgLINp7qXvDiLrdCpgetrjLWn4"
+  },
+  "metadata": {
+    "created": "2026-05-23T16:06:20.787748",
+    "generator": "abi-core-cli",
+    "version": "1.0.0"
+  }
+}
