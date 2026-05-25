@@ -96,7 +96,7 @@ Policies are defined in `services/guardian/opa/policies/` using Rego language:
 1. **Clone and setup:**
    ```bash
    cd abi-swarm
-   pip install -r requirements.txt
+   docker compose build
    ```
 
 2. **Start services:**

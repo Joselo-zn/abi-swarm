@@ -1,0 +1,23 @@
+agents:
+  builder:
+    description: Builds and deploys ephemeral AI agents on demand
+    name: Builder Agent
+    path: agents/builder
+    port: 11439
+    type: builder
+  orchestrator:
+    description: Coordinates multi-agent workflow execution
+    name: Orchestrator Agent
+    path: agents/orchestrator
+    port: 8002
+    type: orchestrator
+  planner:
+    description: Decomposes tasks and assigns agents
+    name: Planner Agent
+    path: agents/planner
+    port: 11437
+    type: planner
+project:
+  default_model: qwen2.5:3b
+  model_serving: centralized
+  name: abi swarm
