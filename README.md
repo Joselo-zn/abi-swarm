@@ -133,9 +133,14 @@ Policies are defined in `services/guardian/opa/policies/` using Rego language:
 
 ### Development
 
+**Install abi-core**
+```bash
+uv venv && source .venv/bin/activate && uv pip install abi-core-ai
+```
+
 1. **Add new agents:**
    ```bash
-   abi-core add agent --name MyAgent --description "Custom agent"
+   uv abi-core add agent --name MyAgent --description "Custom agent"
    ```
 
 2. **Register agents:**
