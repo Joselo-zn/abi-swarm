@@ -116,6 +116,7 @@ class AbiPlannerAgent(AbiAgent):
 
             if status == "needs_clarification":
                 async for task in self._yield_clarification(plan_data):
+                    abi_logging(f"Need clarification{task}")
                     yield task
 
             elif status == "ready":

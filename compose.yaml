@@ -28,7 +28,7 @@ services:
     environment:
     - ABI_ROLE=abi swarm
     - ABI_NODE=ABI Node
-    - MODEL_NAME=qwen2.5:3b
+    - MODEL_NAME=granite4.1:8b
     - OLLAMA_HOST=http://localhost:11434
     - LOG_LEVEL=INFO
     - SEMANTIC_LAYER_HOST=http://abi-swarm-semantic-layer:10100
@@ -253,7 +253,7 @@ services:
     ports:
     - 11439:11439
     environment:
-    - MODEL_NAME=qwen2.5:3b
+    - MODEL_NAME=granite4.1:8b
     - GOOGLE_API_KEY=GOOGLE_API_KEY
     - AGENT_PORT=11439
     - SERVICE_PORT=11439

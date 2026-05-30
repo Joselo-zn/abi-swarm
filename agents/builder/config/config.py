@@ -29,11 +29,11 @@ class AgentConfig:
 
     # LLM Configuration (unified dict for create_llm)
     LLM_CONFIG: dict = {
-        "provider": os.getenv("LLM_PROVIDER", "gemini"),
-        "model": "gemini-3.5-flash",#os.getenv("MODEL_NAME", "qwen2.5:3b"),
+        "provider": os.getenv("LLM_PROVIDER", "ollama"),
+        "model": os.getenv("MODEL_NAME", "granite4.1:8b"),
         "temperature": float(os.getenv("LLM_TEMPERATURE", "0.1")),
-        "base_url": os.getenv("LLM_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai/"),#os.getenv("OLLAMA_HOST", "http://localhost:11434")),
-        "api_key": os.getenv("LLM_API_KEY", ""),
+        "base_url": os.getenv("OLLAMA_HOST", "http://localhost:11434"),
+        #"api_key": os.getenv("LLM_API_KEY", ""),
         "aws_region": os.getenv("AWS_REGION", "us-east-1"),
         "azure_deployment": os.getenv("AZURE_DEPLOYMENT", ""),
         "azure_endpoint": os.getenv("AZURE_ENDPOINT", ""),

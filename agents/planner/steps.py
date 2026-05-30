@@ -23,6 +23,7 @@ from abi_core.common.agent_card_loader import get_agent_url
 async def analyze_query(query, context):
     """Prepare the planning prompt from query + context."""
     planning_query = f"User request: {query}\nContext: {json.dumps(context, indent=2)}"
+    abi_logging(f"Planning query: {planning_query}")
     return {"planning_query": planning_query}
 
 
@@ -41,7 +42,7 @@ def parse_plan(raw_response):
     try:
         validated = PlannerOutput.model_validate(parsed)
         plan_dict = validated.to_dict()
-        abi_logging(f"[✅] Plan validated by PlannerOutput schema")
+        abi_logging(f"[✅] Plan validated by PlannerOutput schema {validated}")
         plan = plan_dict.get("plan", {})
         abi_logging(f"[📋] PLAN: objective='{plan.get('objective', '')}' strategy={plan.get('execution_strategy', '')}")
         for t in plan.get("tasks", []):
